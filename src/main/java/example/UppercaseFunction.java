@@ -28,10 +28,10 @@ import org.springframework.context.annotation.Bean;
 import com.microsoft.azure.functions.ExecutionContext;
 
 @SpringBootApplication
-public class Config {
+public class UppercaseFunction {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Config.class, args);
+		SpringApplication.run(UppercaseFunction.class, args);
 	}
 
 	@Bean

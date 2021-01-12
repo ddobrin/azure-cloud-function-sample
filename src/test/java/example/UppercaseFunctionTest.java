@@ -27,12 +27,12 @@ import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHa
  * @author Dave Syer
  *
  */
-public class MapTests {
+public class UppercaseFunctionTest {
 
 	@Test
 	public void start() throws Exception {
 		AzureSpringBootRequestHandler<String, String> handler = new AzureSpringBootRequestHandler<>(
-			Config.class);
+			UppercaseFunction.class);
 		ExecutionContext ec = new ExecutionContext() {
 			@Override
 			public Logger getLogger() {
