@@ -136,16 +136,18 @@ Alternatively you can test the function in the Azure Dashboard UI:
   "name": "your name"
 }
 
-# observe the HTTP response content
+observe the HTTP response content
 {
   "greeting": "HELLO",
   "name": "YOUR NAME"
 }
+```
 
+For `lowercase` testing:
+```shell 
 * click on the left nav `Functions` and click the function name `lowercase`
 * click on the left nav `Code and Test` and at the top of the page `Test/Run`
 * In the body of the request, on the right-hand side, paste the same example we have used above:
-```shell
 {
   "greeting": "HELLO",
   "name": "Your name"
