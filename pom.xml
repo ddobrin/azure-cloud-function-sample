@@ -20,7 +20,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<functionAppName>function-sample-azure</functionAppName>
+		<functionAppName>function-sample-azure-sample</functionAppName>
 		<functionAppRegion>westus</functionAppRegion>
 		<functionResourceGroup>java-function-group</functionResourceGroup>
 		<stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>

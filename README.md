@@ -1,5 +1,17 @@
-You can run this Azure function locally, similar to other Spring Cloud Function samples, however this time by using the Azure Maven plugin, as the Microsoft Azure functions execution context must be available.
+This app builds 2 functions, built using different approaches:
+* `lowercase` - built as a generic function, can be run in any function service or locally
+* `uppercase` - built as a function integrated closely with the Azure CLI, can be run in Microsoft Azure or locally
 
+The 2 approaches wish to illustrate a generic approach vs tight integration with a cloud provider API.
+
+This document looks into:
+* building and running the functions to Azure
+* deployment to Azure Functions
+* debugging in a local environment
+
+You can run these Azure functions locally, similar to other Spring Cloud Function samples, however this time by using the Azure Maven plugin, as the Microsoft Azure functions execution context must be available.
+
+## Build and package 
 ```shell
 # Build and package 
 $ mvn clean package 
@@ -33,9 +45,24 @@ $ http POST localhost:7071/api/uppercase greeting=hello name='your name'
 }
 ```
 
+The `lowercase` function follows a similar approach for testing, with different endpoints and test cases:
+```shell
+# testing with cURL
+$ curl -H "Content-Type: application/json" localhost:7071/api/lowercase -d '{"greeting": "HELLO", "name": "Your name"}'
+
+# testing with HTTPie
+$ http POST localhost:7071/api/uppercase greeting=HELLO name='Your name'
+
+# result
+{
+  "greeting": "hello",
+  "name": "your name"
+}
+```
+## Deploy to Azure
 To run locally on top of Azure Functions, and to deploy to your live Azure environment, you will need the Azure Functions Core Tools installed along with the Azure CLI (see https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-java-maven for more details).
 
-To deploy the function to your live Azure environment, including an automatic provisioning of an HTTPTrigger for the function:
+To deploy the functions to your live Azure environment, including an automatic provisioning of an HTTPTrigger for the functions:
 ```shell
 # login to Azure from the CLI
 $ az login
@@ -77,7 +104,24 @@ $ http POST https://function-sample-azure.azurewebsites.net/api/uppercase greeti
 }
 ```
 
-Please ensure that you use the right URL for the function above. 
+for `lowercase`, on another terminal try this: 
+```shell
+# testing
+curl https://<azure-function-url-from-the-log>/api/lowercase -d '{"greeting": "HELLO", "name": "Your name"}'
+
+# testing with cURL
+$ curl -H "Content-Type: application/json" https://function-sample-azure.azurewebsites.net/api/lowercase -d '{"greeting": "HELLO", "name": "Your name"}'
+
+# testing with HTTPie
+$ http POST https://function-sample-azure.azurewebsites.net/api/lowercase greeting=HELLO name='Your name'
+
+# result
+{
+  "greeting": "hello",
+  "name": "your name"
+}
+```
+Please ensure that you use the right URL for the functions above. 
 
 Alternatively you can test the function in the Azure Dashboard UI:
 
@@ -97,6 +141,32 @@ Alternatively you can test the function in the Azure Dashboard UI:
   "greeting": "HELLO",
   "name": "YOUR NAME"
 }
+
+* click on the left nav `Functions` and click the function name `lowercase`
+* click on the left nav `Code and Test` and at the top of the page `Test/Run`
+* In the body of the request, on the right-hand side, paste the same example we have used above:
+```shell
+{
+  "greeting": "HELLO",
+  "name": "Your name"
+}
+```
+You can observe the HTTP response content:
+```shell
+{
+  "greeting": "hello",
+  "name": "your name"
+}
 ```
 
 Please note that the Dashboard provides by default information on Function Execution Count, Memory Consumption and Execution Time.
+
+## Debug in a local environment
+If you would like to debug the functions in your IDE, all you have to do is:
+```shell
+# start app locally
+# enableDebug opens the debug port in the current host at port 5005
+$ mvn azure-functions:run -DenableDebug
+```
+
+You can start a remote debugging session in any IDE at `localhost` and port `5005`, set breakpoints and send requests.
